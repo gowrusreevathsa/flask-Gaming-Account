@@ -18,6 +18,8 @@ def signUp():
 def signUpData():
     if request.method == 'POST':
         data = request.form
+        if users.count_documents({"_id" : data['nickname']}, limit = 1):
+            return render_template('signUp.html')
     data = [
         {
             "_id" : data['nickname'],
@@ -62,4 +64,5 @@ if __name__ == '__main__':
     client = MongoClient("mongodb://127.0.0.1:27017")
     db = client['GamingAccount']
     users = db['users']
+    games = db['games']
     app.run(debug = True)
