@@ -37,13 +37,12 @@ def signUpData():
 
 @app.route('/login/', methods = ['POST'])
 def login():
-    print('In Login')
     if request.method == 'POST':
         data = request.form
     else:
         return redirect(url_for('index'))
     validate = authLogin(data)
-    return redirect(url_for('index'))
+    return validate
 
 def authLogin(data):
     usernameInp = data['usernameInp']
