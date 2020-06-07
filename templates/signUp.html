@@ -8,9 +8,11 @@
     <body>
         <h3>Create a new account</h3>
         
-        <form action="">
+        <form action="{{url_for('signUpData')}}" method="POST">
             <input type="text" name="fname" placeholder="First Name">
             <input type="text" name="lname" placeholder="Last Name"> 
+            <br> <br>
+            <input type="text" name="nickname" placeholder="Nick Name">
             <br> <br>
             <input type="number" name="phNum" placeholder="Contact Number">
             <br> <br>
@@ -19,6 +21,11 @@
             <input type="password" name="fpass" placeholder="Password">
             <br> <br>
             <input type="password" name="spass" placeholder="Confirm Password">
+            <br> <br>
+            <input type="text" name="city" placeholder="City">
+            <input type="text" name="country" placeholder="Country">
+            <br> <br>
+            <input type="submit" name="signUpButton" value="Sign Up">
 
         </form>
     </body>
