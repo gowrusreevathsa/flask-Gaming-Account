@@ -25,7 +25,7 @@ def signUpData():
             "lname" : data['lname'],
             "phNum" : data['phNum'],
             "email" : data['email'],
-            "pass" : hashlib.sha256(data['fpass'].encode()),
+            "pass" : hashlib.sha256((data['fpass']).encode()).hexdigest(),
             "city" : data['city'],
             "country" : data['country']
         }
@@ -37,7 +37,8 @@ def signUpData():
 
 @app.route('/login/', methods = ['POST'])
 def login():
-    if request.form == 'POST':
+    print('In Login')
+    if request.method == 'POST':
         data = request.form
     else:
         return redirect(url_for('index'))
@@ -47,10 +48,9 @@ def login():
 def authLogin(data):
     usernameInp = data['usernameInp']
     passInp = data['passInp']
-
-    if data.count_documents({"_id" : usernameInp}, limit = 1):
-        for i in users.find_one({"__id": usernameInp}):
-            if i['pass'] == hashlib.sha256(passInp).encode():
+    if users.count_documents({"_id" : usernameInp}, limit = 1):
+        for i in users.find({"_id": usernameInp}, limit = 1):
+            if i['pass'] == hashlib.sha256(passInp.encode()).hexdigest():
                 return redirect(url_for('home'))
     else:
         return redirect(url_for('index'))
