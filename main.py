@@ -41,8 +41,8 @@ def login():
         data = request.form
     else:
         return redirect(url_for('index'))
-    validate = authLogin(data)
-    return validate
+    
+    return authLogin(data)
 
 def authLogin(data):
     usernameInp = data['usernameInp']
