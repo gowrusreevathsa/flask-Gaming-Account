@@ -1,9 +1,12 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from bson import ObjectId
 from pymongo import MongoClient    
+from flask_socketio import SocketIO, send
 import hashlib
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'Some random secret key that is pretty hard to crack'
+socketio = SocketIO(app)
 
 @app.route('/')
 @app.route('/index/')
@@ -60,9 +63,13 @@ def authLogin(data):
 def home():
     return render_template('home.html')
 
+@app.route('/storeGameData')
+def  storeGameData():
+    pass
+
 if __name__ == '__main__':
     client = MongoClient("mongodb://127.0.0.1:27017")
     db = client['GamingAccount']
     users = db['users']
     games = db['games']
-    app.run(debug = True)
+    socketio.run(app)
