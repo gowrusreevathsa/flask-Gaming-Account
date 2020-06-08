@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify
+from flask import Flask, render_template, request, redirect, url_for, session
 from bson import ObjectId
 from pymongo import MongoClient    
 from flask_socketio import SocketIO, send
@@ -46,7 +46,6 @@ def login():
         data = request.form
     else:
         return redirect(url_for('index'))
-    
     return authLogin(data)
 
 def authLogin(data):
@@ -55,6 +54,8 @@ def authLogin(data):
     if users.count_documents({"_id" : usernameInp}, limit = 1):
         for i in users.find({"_id": usernameInp}, limit = 1):
             if i['pass'] == hashlib.sha256(passInp.encode()).hexdigest():
+                session['username'] = usernameInp
+                session['type'] = 'user'
                 return redirect(url_for('home'))
     else:
         return redirect(url_for('index'))
@@ -71,8 +72,21 @@ def  storeGameData():
 def handle_gameData(msg):
     print(msg)
     if users.count_documents({"_id" : msg['username']}, limit = 1):
-        # print("Found")
-        pass
+        game = db[session['gamename']]
+        data = [{
+            "_id" : msg['username'],
+            "par1" : msg['par1'],
+            "par2" : msg['par2'],
+            "par3" : msg['par3']
+        }]
+        if game.count_documents({"_id" : msg['username']}, limit = 1):
+            game.update_one({"_id" : msg['username']}, {'$set' : data})
+        else:
+            game.insert_one(data)
+
+        #After insert/update
+        for i in game.find_one({"_id" : msg['username']}):
+            print(i)
     else:
         print("User not registered to Gaming Account")
         return render_template('GameData.html')
@@ -80,11 +94,13 @@ def handle_gameData(msg):
 
 @socketio.on('loginAsGameSocket')
 def handle_loginAsGameSocket(data):
-    usernameInp = data['usernameInp']
-    passInp = data['passInp']
+    usernameInp = data['username']
+    passInp = data['pass']
     if users.count_documents({"_id" : usernameInp}, limit = 1):
         for i in users.find({"_id": usernameInp}, limit = 1):
             if i['pass'] == hashlib.sha256(passInp.encode()).hexdigest():
+                session['gamename'] = usernameInp
+                session['type'] = 'game'
                 return redirect(url_for('storeGameData'))
 
 if __name__ == '__main__':
