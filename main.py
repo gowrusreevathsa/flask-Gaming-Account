@@ -6,7 +6,7 @@ import hashlib
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'Some random secret key that is pretty hard to crack'
-socketio = SocketIO(app)
+socketio = SocketIO(app, cors_allowed_origins = '*')
 
 @app.route('/')
 @app.route('/index/')
@@ -65,7 +65,7 @@ def home():
 
 @app.route('/storeGameData')
 def  storeGameData():
-    pass
+    return render_template('GameData.html')
 
 @socketio.on('testEvent')
 def handle_testEvent(msg):
@@ -76,4 +76,4 @@ if __name__ == '__main__':
     db = client['GamingAccount']
     users = db['users']
     games = db['games']
-    socketio.run(app)
+    socketio.run(app, debug = True)
