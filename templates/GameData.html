@@ -4,10 +4,24 @@
             Game Data
         </title>
 
-        <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     </head>
 
     <body>
         
+        <script type="text/javascript">
+            $(document).ready(function(){
+                var socket = io.connect('http://127.0.0.1:5000');
+                $('#sendButton').on('click', function(){
+                    socket.emit('testEvent' ,$('#myMessage').val());
+                    $('#myMessage').val('');
+                });
+            });
+        </script>
+
+        <input type="text" id="myMessage">
+        <input type="button" id="sendButton">
+
     </body>
 </html>
