@@ -32,11 +32,14 @@ def signUpData():
             "email" : data['email'],
             "pass" : hashlib.sha256((data['fpass']).encode()).hexdigest(),
             "city" : data['city'],
-            "country" : data['country']
+            "country" : data['country'],
+            "type" : data['type']
         }
     ]
-
-    res = users.insert(data)
+    if data['type'] == 'gamer':
+        res = users.insert(data)
+    else:
+        res = games.insert(data)
     print(res)
     return redirect(url_for('index'))
 
