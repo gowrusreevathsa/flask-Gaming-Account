@@ -23,6 +23,8 @@ def signUpData():
         data = request.form
         if users.count_documents({"_id" : data['nickname']}, limit = 1):
             return render_template('signUp.html')
+    
+    print(data['type'])
     data = [
         {
             "_id" : data['nickname'],
@@ -36,10 +38,11 @@ def signUpData():
             "type" : data['type']
         }
     ]
-    if data['type'] == 'gamer':
-        res = users.insert(data)
-    else:
-        res = games.insert(data)
+    for i in data:
+        if i['type'] == 'gamer':
+            res = users.insert_one(data)
+        else:
+            res = games.insert_one(data)
     print(res)
     return redirect(url_for('index'))
 
