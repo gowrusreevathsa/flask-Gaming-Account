@@ -3,9 +3,24 @@
         <title>
             Gaming Account
         </title>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+        
     </head>
 
     <body>
+        <script type="text/javascript">
+            $(document).ready(function(){
+                var socket = io.connect('http://127.0.0.1:5000');
+                $('#loginAsGame').on('click', function(){
+                    socket.emit('loginAsGameSocket' ,{
+                        username : $('#usernameInp').val(),
+                        pass : $('#passInp').val()
+                    });
+                    // $('#myMessage').val('');
+                });
+            });
+        </script>
         <h3>Log in to your account</h3>
 
         <form action="{{url_for('login')}}" method="POST">
@@ -14,6 +29,8 @@
             Password: <input type="password" name="passInp" placeholder="Password" id="pass" value="poaspoap">
             <br><br>
             <input type="submit" name="login" value="Login">
+
+            <input type="button" name="loginAsGame" id="loginAsGame" value="Login as Game">
         </form>
 
         <a href="{{url_for('signUp')}}">New User? Sign Up</a>

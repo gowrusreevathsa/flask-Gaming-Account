@@ -67,9 +67,25 @@ def home():
 def  storeGameData():
     return render_template('GameData.html')
 
-@socketio.on('testEvent')
-def handle_testEvent(msg):
+@socketio.on('gameData')
+def handle_gameData(msg):
     print(msg)
+    if users.count_documents({"_id" : msg['username']}, limit = 1):
+        # print("Found")
+        pass
+    else:
+        print("User not registered to Gaming Account")
+        return render_template('GameData.html')
+    # for i in msg:
+
+@socketio.on('loginAsGameSocket')
+def handle_loginAsGameSocket(data):
+    usernameInp = data['usernameInp']
+    passInp = data['passInp']
+    if users.count_documents({"_id" : usernameInp}, limit = 1):
+        for i in users.find({"_id": usernameInp}, limit = 1):
+            if i['pass'] == hashlib.sha256(passInp.encode()).hexdigest():
+                return redirect(url_for('storeGameData'))
 
 if __name__ == '__main__':
     client = MongoClient("mongodb://127.0.0.1:27017")

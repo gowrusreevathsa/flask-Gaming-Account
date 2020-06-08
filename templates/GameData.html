@@ -14,14 +14,33 @@
             $(document).ready(function(){
                 var socket = io.connect('http://127.0.0.1:5000');
                 $('#sendButton').on('click', function(){
-                    socket.emit('testEvent' ,$('#myMessage').val());
-                    $('#myMessage').val('');
+                    socket.emit('gameData' ,{
+                        username : $('#username').val(),
+                        par1 : $('#data1').val(),
+                        par2 : $('#data2').val(),
+                        par3 : $('#data3').val(),
+                    });
+                    // $('#myMessage').val('');
                 });
             });
         </script>
+        <h2>{{gameName}}</h2>
+        <br><br>
+        <br><br>
+        <input type="text" name="username" id="username" placeholder="Username">
+        <br><br>
+        <input type="text" name="parameter1" id="par1" placeholder="Parameter">
+        <input type="text" name="data1" id="data1" placeholder="Data">
+        <br><br>
+        <input type="text" name="parameter2" id="par2" placeholder="Parameter">
+        <input type="text" name="data2" id="data2" placeholder="Data">
+        <br><br>
+        <input type="text" name="parameter3" id="par3" placeholder="Parameter">
+        <input type="text" name="data3" id="data3" placeholder="Data">
 
-        <input type="text" id="myMessage">
-        <input type="button" id="sendButton">
+        <br><br>
+        <input type="button" id="sendButton" value="Submit">
+
 
     </body>
 </html>
