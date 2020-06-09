@@ -17,8 +17,11 @@
                         username : $('#username').val(),
                         pass : $('#pass').val()
                     });
-                    // $('#myMessage').val('');
                 });
+
+                socket.on('redirect', function(data){
+                    window.location = data.url;
+                })
             });
         </script>
         <h3>Log in to your account</h3>

@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from bson import ObjectId
 from pymongo import MongoClient    
-from flask_socketio import SocketIO, send
+from flask_socketio import SocketIO, send, emit
 import hashlib
 
 app = Flask(__name__)
@@ -68,8 +68,8 @@ def authLogin(data):
 def home():
     return render_template('home.html')
 
-@app.route('/storeGameData')
-def  storeGameData():
+@app.route('/storeGameData/')
+def storeGameData():
     return render_template('GameData.html')
 
 @socketio.on('gameData')
@@ -103,11 +103,14 @@ def handle_loginAsGameSocket(msg):
     passInp = msg['pass']
     print(usernameInp + ' ' + passInp)
     if users.count_documents({"_id" : usernameInp}, limit = 1):
+        print("In IF")
         for i in users.find({"_id": usernameInp}, limit = 1):
+            print("In IF")
             if i['pass'] == hashlib.sha256(passInp.encode()).hexdigest():
+                print("In IF")
                 session['gamename'] = usernameInp
                 session['type'] = 'game'
-                return redirect(url_for('storeGameData'))
+                emit('redirect', {'url' : url_for('storeGameData')})
 
 if __name__ == '__main__':
     client = MongoClient("mongodb://127.0.0.1:27017")
