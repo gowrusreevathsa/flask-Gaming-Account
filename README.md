@@ -1,4 +1,4 @@
-# flask-Gaming-Account
+# flask-Gaming-Account (Project in progress)
 Python Flask and MongoDB based profile managing system. Stores information related to users and their progress in games
 
 
