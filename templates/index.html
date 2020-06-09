@@ -14,8 +14,8 @@
                 var socket = io.connect('http://127.0.0.1:5000');
                 $('#loginAsGame').on('click', function(){
                     socket.emit('loginAsGameSocket' ,{
-                        username : $('#usernameInp').val(),
-                        pass : $('#passInp').val()
+                        username : $('#username').val(),
+                        pass : $('#pass').val()
                     });
                     // $('#myMessage').val('');
                 });
@@ -24,7 +24,7 @@
         <h3>Log in to your account</h3>
 
         <form action="{{url_for('login')}}" method="POST">
-            Username: <input type="text" name="usernameInp" placeholder="xyz or xyz@example.com">
+            Username: <input type="text" name="usernameInp" id="username" placeholder="xyz or xyz@example.com">
             <br><br>
             Password: <input type="password" name="passInp" placeholder="Password" id="pass" value="poaspoap">
             <br><br>

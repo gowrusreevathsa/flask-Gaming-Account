@@ -25,8 +25,7 @@ def signUpData():
             return render_template('signUp.html')
     
     print(data['type'])
-    data = [
-        {
+    result = {
             "_id" : data['nickname'],
             "fname" : data['fname'],
             "lname" : data['lname'],
@@ -37,12 +36,11 @@ def signUpData():
             "country" : data['country'],
             "type" : data['type']
         }
-    ]
-    for i in data:
-        if i['type'] == 'gamer':
-            res = users.insert_one(data)
-        else:
-            res = games.insert_one(data)
+    # for i in data:
+    if data['type'] == 'gamer':
+        res = users.insert_one(result)
+    else:
+        res = users.insert_one(result)
     print(res)
     return redirect(url_for('index'))
 
@@ -99,9 +97,11 @@ def handle_gameData(msg):
     # for i in msg:
 
 @socketio.on('loginAsGameSocket')
-def handle_loginAsGameSocket(data):
-    usernameInp = data['username']
-    passInp = data['pass']
+def handle_loginAsGameSocket(msg):
+    # for data in msg:
+    usernameInp = msg['username']
+    passInp = msg['pass']
+    print(usernameInp + ' ' + passInp)
     if users.count_documents({"_id" : usernameInp}, limit = 1):
         for i in users.find({"_id": usernameInp}, limit = 1):
             if i['pass'] == hashlib.sha256(passInp.encode()).hexdigest():
