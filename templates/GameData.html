@@ -16,9 +16,13 @@
                 $('#sendButton').on('click', function(){
                     socket.emit('gameData' ,{
                         username : $('#username').val(),
-                        par1 : $('#data1').val(),
-                        par2 : $('#data2').val(),
-                        par3 : $('#data3').val(),
+                        game : $('#game').val(),
+                        par1 : $('#par1').val(),
+                        par2 : $('#par2').val(),
+                        par3 : $('#par3').val(),
+                        data1 : $('#data1').val(),
+                        data2 : $('#data2').val(),
+                        data3 : $('#data3').val()
                     });
                     // $('#myMessage').val('');
                 });
@@ -28,6 +32,7 @@
         <br><br>
         <br><br>
         <input type="text" name="username" id="username" placeholder="Username">
+        <input type="text" name="game" id="game" placeholder="Game">
         <br><br>
         <input type="text" name="parameter1" id="par1" placeholder="Parameter">
         <input type="text" name="data1" id="data1" placeholder="Data">

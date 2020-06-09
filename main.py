@@ -60,7 +60,11 @@ def authLogin(data):
             if i['pass'] == hashlib.sha256(passInp.encode()).hexdigest():
                 session['username'] = usernameInp
                 session['type'] = 'user'
-                return redirect(url_for('home'))
+                if data['login'] == 'Login':
+                    return redirect(url_for('home'))
+                else:
+                    game = db[usernameInp]
+                    return redirect(url_for('storeGameData'))
     else:
         return redirect(url_for('index'))
 
@@ -74,15 +78,17 @@ def storeGameData():
 
 @socketio.on('gameData')
 def handle_gameData(msg):
-    print(msg)
+    client = MongoClient("mongodb://127.0.0.1:27017")
+    db = client['GamingAccount']
+    game = db[msg['game']]
     if users.count_documents({"_id" : msg['username']}, limit = 1):
-        game = db[session['gamename']]
-        data = [{
+        # game = games[session['gamename']]
+        data = {
             "_id" : msg['username'],
-            "par1" : msg['par1'],
-            "par2" : msg['par2'],
-            "par3" : msg['par3']
-        }]
+            "par1" : msg['data1'],
+            "par2" : msg['data2'],
+            "par3" : msg['data3'],
+        }
         if game.count_documents({"_id" : msg['username']}, limit = 1):
             game.update_one({"_id" : msg['username']}, {'$set' : data})
         else:
@@ -103,14 +109,16 @@ def handle_loginAsGameSocket(msg):
     passInp = msg['pass']
     print(usernameInp + ' ' + passInp)
     if users.count_documents({"_id" : usernameInp}, limit = 1):
-        print("In IF")
         for i in users.find({"_id": usernameInp}, limit = 1):
-            print("In IF")
             if i['pass'] == hashlib.sha256(passInp.encode()).hexdigest():
-                print("In IF")
                 session['gamename'] = usernameInp
                 session['type'] = 'game'
+                # game = db[usernameInp]
+                createOrConnect(usernameInp)
                 emit('redirect', {'url' : url_for('storeGameData')})
+
+def createOrConnect(gameName):
+    game = db[gameName]
 
 if __name__ == '__main__':
     client = MongoClient("mongodb://127.0.0.1:27017")

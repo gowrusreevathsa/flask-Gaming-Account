@@ -12,16 +12,16 @@
         <script type="text/javascript">
             $(document).ready(function(){
                 var socket = io.connect('http://127.0.0.1:5000');
-                $('#loginAsGame').on('click', function(){
-                    socket.emit('loginAsGameSocket' ,{
-                        username : $('#username').val(),
-                        pass : $('#pass').val()
-                    });
-                });
+                // $('#loginAsGame').on('click', function(){
+                //     socket.emit('loginAsGameSocket' ,{
+                //         username : $('#username').val(),
+                //         pass : $('#pass').val()
+                //     });
+                // });
 
-                socket.on('redirect', function(data){
-                    window.location = data.url;
-                })
+                // socket.on('redirect', function(data){
+                //     window.location = data.url;
+                // })
             });
         </script>
         <h3>Log in to your account</h3>
@@ -32,8 +32,7 @@
             Password: <input type="password" name="passInp" placeholder="Password" id="pass" value="poaspoap">
             <br><br>
             <input type="submit" name="login" value="Login">
-
-            <input type="button" name="loginAsGame" id="loginAsGame" value="Login as Game">
+            <input type="submit" name="login" id="loginAsGame" value="Login as Game">
         </form>
 
         <a href="{{url_for('signUp')}}">New User? Sign Up</a>
